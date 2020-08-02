@@ -1,61 +1,44 @@
+//specific folder for API routes
 const fs = require('fs');
 const path = require('path');
 var express = require('express');
 var app = express();
 
 module.exports = function(app) {
-
-
-  
-  fs.readFile("../Develop/db/db.json","utf8", (err, data) => {
-    if (err) throw err;
-    let idAddToReq = function (req, res, next) {
-      notes.id = req.params.id;
-      console.log(req.params.id);
-      next()
-    }
-
-    let notes = JSON.parse(data);
-
+    //reads db.json file
+    let fileRead = fs.readFileSync("../Develop/db/db.json","utf8");
+    //parse this file
+    let notes = JSON.parse(fileRead);
+    //route for showing json webpage of notes
     app.get("/api/notes", function(req, res) {
-      res.json(notes);
+        res.json(notes);
     });
-
-
-
+    //route for posting new notes
     app.post("/api/notes", function(req, res) {
-      let newNotes = req.body;
-      notes.push(newNotes);
-      res.json(newNotes);
-      addNote();
-    });
-
-    app.get("/api/notes/:id", function(req,res) {
-      res.json(notes[req.params.id]);
-      console.log(req.params.id);
-
-    });
-
-    app.delete("/api/notes/:id", function(req, res) {
-      let newNotes = req.body;
-      notes.splice(req.params.id, 1);
-      res.json(newNotes);
-      addNote();
+        let newNote = req.body;
+        let postID = (notes.length.toString())
+        newNote.id = postID;
+        notes.push(newNote);
+        res.json(newNote);
+        addNote();
     });
     
-    app.get("/notes", function(req, res) {
-      res.sendFile(path.join(__dirname, "../public/notes.html"));
+    //search by id in url
+    app.get("/api/notes/:id", function(req,res) {
+        res.json(notes[req.params.id]);
     });
-    app.get("*", function(req, res) {
-      res.sendFile(path.join(__dirname, "../public/index.html"));
+        //route for deleting  notes
+    app.delete("/api/notes/:id", function(req, res) {
+        notes.splice(req.params.id, 1);
+        res.json(notes);
+        addNote();
     });
-
+    //fucntion for saving notes to db.json
     function addNote() {
-      fs.writeFile("../Develop/db/db.json",JSON.stringify(notes),err => {
+        fs.writeFile('../Develop/db/db.json',JSON.stringify(notes),err => {
         if (err) throw err;
         return true;
-      })
+        })
     };
-  });
 };
 

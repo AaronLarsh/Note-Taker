@@ -5,6 +5,7 @@
 
 var express = require("express");
 var path = require("path");
+var fs = require("fs");
 
 // ==============================================================================
 // EXPRESS CONFIGURATION
@@ -23,8 +24,9 @@ app.use(express.json());
 
 //routes
 
-//require("./routes/apiRoutes")(app);
+require("./routes/apiRoutes")(app);
 require("./routes/htmlRoutes")(app);
+
 
 // =============================================================================
 // LISTENER

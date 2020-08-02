@@ -22,12 +22,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //routes
-app.get("/notes", function(req, res) {
-    res.sendFile(path.join(__dirname, "../Develop/public/notes.html"));
-});
-app.get("*", function(req, res) {
-    res.sendFile(path.join(__dirname, "../Develop/public/index.html"));
-});
+
+//require("./routes/apiRoutes")(app);
+require("./routes/htmlRoutes")(app);
 
 // =============================================================================
 // LISTENER

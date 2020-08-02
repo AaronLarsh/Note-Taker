@@ -25,8 +25,52 @@ app.use(express.static(path.join(__dirname,'public')));
 
 //routes
 
-require("./routes/apiRoutes")(app);
+//require("./routes/apiRoutes")(app);
 //require("./routes/htmlRoutes")(app);
+let fileRead = fs.readFileSync("db/db.json","utf8");
+let notes = JSON.parse(fileRead);
+
+app.get("/api/notes", function(req, res) {
+    res.json(notes);
+});
+
+app.post("/api/notes", function(req, res) {
+    let newNote = req.body;
+    let postID = (notes.length.toString())
+    console.log(postID)
+    newNote.id = postID;
+    notes.push(newNote);
+    res.json(newNote);
+    console.log(notes)
+    addNote();
+});
+
+app.get("/api/notes/:id", function(req,res) {
+    res.json(notes[req.params.id]);
+    console.log(req.params.id);
+});
+
+app.delete("/api/notes/:id", function(req, res) {
+    notes.splice(req.params.id, 1);
+    res.json(notes);
+    addNote();
+});
+
+app.get("/notes", function(req, res) {
+    res.sendFile(path.join(__dirname, "/public/notes.html"));
+});
+
+app.get("*", function(req, res) {
+    res.sendFile(path.join(__dirname, "/public/index.html"));
+});
+
+function addNote() {
+    fs.writeFile("db/db.json",JSON.stringify(notes),err => {
+    if (err) throw err;
+    return true;
+    })
+};
+
 
 
 // =============================================================================

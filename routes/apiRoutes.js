@@ -6,7 +6,7 @@ var app = express();
 
 module.exports = function(app) {
     //reads db.json file
-    let fileRead = fs.readFileSync("../Develop/db/db.json","utf8");
+    let fileRead = fs.readFileSync("./db/db.json","utf8");
     //parse this file
     let notes = JSON.parse(fileRead);
     //route for showing json webpage of notes
@@ -35,7 +35,7 @@ module.exports = function(app) {
     });
     //fucntion for saving notes to db.json
     function addNote() {
-        fs.writeFile('../Develop/db/db.json',JSON.stringify(notes),err => {
+        fs.writeFile('./db/db.json',JSON.stringify(notes),err => {
         if (err) throw err;
         return true;
         })

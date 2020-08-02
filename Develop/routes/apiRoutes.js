@@ -1,25 +1,48 @@
 const fs = require('fs');
-const dbJSON = require('../db/db.json')
-
-// ===============================================================================
-// ROUTING
-// ===============================================================================
+const path = require('path');
 
 module.exports = function(app) {
-  app.get("/api/notes", function(req, res) {
-    return res.json(dbJSON);
-  });
+  
+  fs.readFile("../Develop/db/db.json","utf8", (err, data) => {
+    if (err) throw err;
+    let notes = JSON.parse(data);
+    app.get("/api/notes", function(req, res) {
+      res.json(notes);
+    });
 
-  // Create New Characters - takes in JSON input
-  app.post("/api/notes", function(req, res) {
-  // req.body hosts is equal to the JSON post sent from the user
-  // This works because of our body parsing middleware
-  var newNote = req.body;
+    app.post("/api/notes", function(req, res) {
+      console.log(req)
+      let newNotes = req.body;
+      notes.push(newNotes);
+      res.json(newNotes);
+      addNote();
+    });
 
-  console.log(newNote);
 
-  dbJSON.push(newNote);
+    app.get("/api/notes/:id", function(req,res) {
+      res.json(notes[req.params.id]);
+      console.log(req)
+    });
 
-  res.json(newNote);
+    app.delete("/api/notes/:id", function(req, res) {
+      notes.splice(req.params.id, 1);
+      addNote();
+      res.redirect('/notes');
+    });
+    
+    app.get("/notes", function(req, res) {
+      res.sendFile(path.join(__dirname, "../public/notes.html"));
+    });
+    app.get("*", function(req, res) {
+      res.sendFile(path.join(__dirname, "../public/index.html"));
+    });
+
+    function addNote() {
+      fs.writeFile("../Develop/db/db.json",JSON.stringify(notes),err => {
+        if (err) throw err;
+        return true;
+      })
+    };
   });
 };
+

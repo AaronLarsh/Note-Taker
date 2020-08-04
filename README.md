@@ -3,8 +3,22 @@
 ## Description 
 This app allows users to to create, read and delete notes.
 ## Instructions 
+### Getting to the App
+1. Navigate to: [My App](https://note-taker-al.herokuapp.com/)
+### Starting the App
+1. Click "Get Started"
+### Entering and saving a note
+1. Enter your note title where it says "Note title"
+1. Enter in your note where it says "Note Text"
+1. After filling out both sections, in the Top left corner click the save disk icon
+### Viewing saved notes 
+1. Note will post to left hand side bar
+1. Select the note title
+### Clear out all text fields or save note info
+1. Click the pencil icon in the top right hand corner
+### Delete save notes 
+1. Select the trash icon for the note you wish to remove
 
-1. naviagate to
 
 ## User Story
 
@@ -27,4 +41,4 @@ Application should allow users to view previously saved notes.
 Application should allow users to delete previously saved notes.
 
 ### Demo
-![alt text](./Assets/demo.gif "Gif of walk through of using CLI")
+![alt text](demo.gif "Gif of walk through of using CLI")
